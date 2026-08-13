@@ -191,7 +191,7 @@ static void wake_input_cb(struct input_event *evt, void *user_data)
 		return;
 	}
 
-	if (evt->code == INPUT_KEY_0) {
+	if (evt->code == INPUT_KEY_0 || evt->code == INPUT_BTN_TOUCH) {
 		atomic_set(&button_wake_pending, 1);
 		k_sem_give(&display_wake_sem);
 	} else if (evt->code == INPUT_KEY_WAKEUP) {
@@ -1030,10 +1030,14 @@ static void power_off_display(const struct device *display)
 	}
 
 	(void)set_display_gpio(&lcd_backlight, 0, "LCD backlight");
-	k_sleep(K_MSEC(20));
-	(void)set_display_gpio(&lcd_power_enable, 0, "LCD power");
 
-	fuel_gauge_ready = false;
+	/*
+	 * Keep the 3V3_2 rail up. It feeds the touch panel and the haptic
+	 * driver as well as the display, and dropping it while they sit on the
+	 * shared I2C bus wedges the bus for everyone — the IMU on the always-on
+	 * rail starts timing out too. Leaving it powered also lets the touch
+	 * controller act as a wake source, which is impossible when it is dark.
+	 */
 }
 
 static uint32_t next_active_sleep_ms(void)
