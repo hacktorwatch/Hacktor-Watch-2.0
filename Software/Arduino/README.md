@@ -1,6 +1,6 @@
-# Test Project for Hacktor-Watch 2.0
+# Arduino Test Project for Hacktor-Watch 2.0
 
-This is a small test project for Platformio written for Hacktor Watch 2.0 that brings up most of the hardware and displays an analog watch face. Written mostly by AI.
+This is a small test project for Platformio written for Hacktor Watch 2.0 that brings up most of the hardware and displays an analog watch face. Written mostly with AI.
 
 Features:
 * Analog watchface with date, steps, and battery %
